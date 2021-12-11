@@ -5,7 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 
 template_dir = '../client' #relative path from ./src/server
-app = Flask(__name__, template_folder=template_dir)
+app = Flask(__name__)
 uri_string = 'postgresql://localhost:5432/todoapp'
 app.config['SQLALCHEMY_DATABASE_URI'] = uri_string
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
