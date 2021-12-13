@@ -70,10 +70,13 @@ for (let i = 0; i < checkboxes.length; i++) {
 //
 document.getElementById('form').onsubmit = function(e) {
   e.preventDefault();
+  const list_id = e.target.dataset['id'];
+  console.log(e)
   fetch('/todos/create', {
     method: 'POST',
     body: JSON.stringify({
-      'description': document.getElementById('description').value
+      'description': document.getElementById('description').value,
+      'list_id': list_id
     }),
     headers: {
       'Content-Type': 'application/json'

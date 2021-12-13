@@ -6,6 +6,7 @@
 
   <body>
     <section class="lists-wrapper">
+      <h4>Todo Lists</h4>
       <ul id="lists">
         {% for list in lists %}
         <li>
@@ -18,7 +19,7 @@
 
     <section class="todos-wrapper">
       <h4>{{ active_list.name }}</h4>
-      <form id='form'>
+      <form id='form' data-id="{{ active_list.id }}">
         <div>
           <label for="new-todo">Todo Item</label>
           <input type="text" id='description' name="description">

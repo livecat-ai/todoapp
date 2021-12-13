@@ -53,8 +53,11 @@ def create():
     body = {}
     try:
         description = request.get_json()['description']
+        list_id = request.get_json()['list_id']
         print(description)
+        list = TodoList.query.get(list_id)
         todo = Todo(description=description)
+        todo.list = list
         db.session.add(todo)
         db.session.commit()
         body['description'] = todo.description
@@ -69,7 +72,6 @@ def create():
         abort(500)
     else:
         return jsonify(body)
-
 
 @app.route('/todos/<todo_id>/set-completed', methods=["POST"])
 def set_complete_todo(todo_id):
