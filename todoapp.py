@@ -13,21 +13,39 @@ db = SQLAlchemy(app)
 
 migrate = Migrate(app, db)
 
+class TodoList(db.Model):
+    __tablename__ = 'todolists'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(), nullable=False)
+    todo_id = db.relationship('Todo', backref='list', lazy=True)
+
+    def __repr__(self):
+        return f'<TodoList (self.id), {self.name}>'
+
 class Todo(db.Model):
     __tablename__ = 'todos'
     id = db.Column(db.Integer, primary_key=True)
     description = db.Column(db.String(), nullable=False)
     completed = db.Column(db.Boolean, nullable=False, default=False)
+    list_id = db.Column(db.Integer, db.ForeignKey('todolists.id'), nullable=False)
 
     def __repr__(self):
-        return f'<Todo {self.id}, {self.desctription}>'
+        return f'<Todo {self.id}, {self.description}>'
+
 
 # db.create_all()
 
+@app.route('/lists/<list_id>')
+def get_list_todos(list_id):
+    todos = Todo.query.filter_by(list_id=list_id).order_by('id').all()
+    lists = TodoList.query.all()
+    active_list = TodoList.query.get(list_id)
+    return render_template('index.html', lists=lists, todos=todos,
+                            active_list=active_list)
+
 @app.route('/')
 def index():
-    results = Todo.query.order_by('id').all()
-    return render_template('index.html', data = results)
+    return redirect(url_for('get_list_todos', list_id=1))
 
 @app.route('/todos/create', methods=['POST'])
 def create():
